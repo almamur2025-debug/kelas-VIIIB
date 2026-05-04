@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Kelas VIII B</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: black;
+    color: white;
+    overflow: hidden;
+}
+
+/* BINTANG */
+.star {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: white;
+    animation: blink 2s infinite;
+}
+@keyframes blink {
+    0%,100% {opacity: 0.2;}
+    50% {opacity: 1;}
+}
+
+/* METEOR */
+.meteor {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: white;
+    animation: fall 2s linear infinite;
+}
+@keyframes fall {
+    from {transform: translate(0,0);}
+    to {transform: translate(-300px,300px);}
+}
+
+/* CENTER */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* CARD */
+.card {
+    background: rgba(0,0,0,0.7);
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 8px;
+    border: none;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background: #22c55e;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+}
+
+.error {
+    color: red;
+}
+
+/* HOME */
+#home, #welcome, #page, #dev {
+    display: none;
+}
+
+/* MENU */
+.menu div {
+    background: #1e293b;
+    margin: 10px auto;
+    padding: 15px;
+    width: 250px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+/* HEADER */
+.header {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* EXIT */
+.exit {
+    margin-top: 20px;
+    background: red;
+}
+</style>
+
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="container" id="loginPage">
+    <div class="card">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <div class="error" id="errorText"></div>
+    </div>
+</div>
+
+<!-- WELCOME -->
+<div class="container" id="welcome">
+    <h1>WELCOME </h1>
+</div>
+
+<!-- HOME -->
+<div id="home">
+    <div class="header">
+         hai  selamat datang di website kelas VIII B 
+    </div>
+
+    <div class="menu">
+        <div onclick="openPage()">jadwal piket</div>
+        <div onclick="openPage()">jadwal pelajaran</div>
+        <div onclick="openPage()">struktur organisasi kelas</div>
+    </div>
+</div>
+
+<!-- PAGE -->
+<div class="container" id="page">
+    <div class="card">
+        <h2>sabar anjay belum diisi</h2>
+        <button class="exit" onclick="backHome()">Exit Halaman</button>
+    </div>
+</div>
+
+<!-- DEV PAGE -->
+<div id="dev">
+    <div class="header">MODE DEVELOPER</div>
+    <div class="menu">
+        <div onclick="showLoginHistory()">riwayat login</div>
+    </div>
+
+    <div id="history" style="text-align:center; margin-top:20px;"></div>
+</div>
+
+<script>
+// LOGIN COUNTER
+let totalLogin = localStorage.getItem("loginCount") || 0;
+
+function login() {
+    let user = document.getElementById("username").value;
+    let pass = document.getElementById("password").value;
+    let error = document.getElementById("errorText");
+
+    if(user === "kelas viii" && pass === "parbanda") {
+        successLogin(false);
+    }
+    else if(user === "alzzoffcial" && pass === "alzztamvan") {
+        successLogin(true);
+    }
+    else {
+        error.textContent = "salah";
+
+        // GETAR
+        if(navigator.vibrate) {
+            navigator.vibrate(300);
+        }
+    }
+}
+
+function successLogin(isDev) {
+    totalLogin++;
+    localStorage.setItem("loginCount", totalLogin);
+
+    document.getElementById("loginPage").style.display = "none";
+    document.getElementById("welcome").style.display = "flex";
+
+    setTimeout(() => {
+        document.getElementById("welcome").style.display = "none";
+
+        if(isDev) {
+            document.getElementById("dev").style.display = "block";
+        } else {
+            document.getElementById("home").style.display = "block";
+        }
+    }, 2000);
+}
+
+function openPage() {
+    document.getElementById("home").style.display = "none";
+    document.getElementById("page").style.display = "flex";
+}
+
+function backHome() {
+    document.getElementById("page").style.display = "none";
+    document.getElementById("home").style.display = "block";
+}
+
+function showLoginHistory() {
+    document.getElementById("history").innerHTML =
+        "Total login: " + totalLogin + " perangkat";
+}
+
+// BINTANG RANDOM
+for(let i=0;i<100;i++){
+    let star = document.createElement("div");
+    star.className="star";
+    star.style.top=Math.random()*100+"vh";
+    star.style.left=Math.random()*100+"vw";
+    document.body.appendChild(star);
+}
+
+// METEOR RANDOM
+setInterval(()=>{
+    let meteor=document.createElement("div");
+    meteor.className="meteor";
+    meteor.style.top=Math.random()*50+"vh";
+    meteor.style.left="100vw";
+    document.body.appendChild(meteor);
+
+    setTimeout(()=>meteor.remove(),2000);
+},1000);
+
+</script>
+
+</body>
+</html>
